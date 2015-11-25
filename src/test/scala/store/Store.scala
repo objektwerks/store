@@ -13,9 +13,11 @@ case class Basket(items: Vector[Discount]) {
 case class Inventory(product: Product, stock: Int)
 
 class Clerk {
-  def checkout(basket: Basket): Vector[Double] = basket.calculate
+  def checkout(basket: Basket): Double = basket.calculate.sum
 }
 
 case class Store(inventory: Inventory, clerk: Clerk)
 
-case class Experience(store: Store)
+case class Experience(store: Store) {
+  def checkout(basket: Basket): Double = store.clerk.checkout(Basket(Vector[Discount]()))
+}
