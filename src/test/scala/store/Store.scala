@@ -19,5 +19,5 @@ class Clerk {
 case class Store(inventory: Inventory, clerk: Clerk)
 
 case class Shopper(store: Store) {
-  def checkout(basket: Basket): Double = store.clerk.checkout(Basket(Vector[Discount]()))
+  def checkout(basket: Basket *): Double = store.clerk.checkout(Basket(Vector[Discount]()))
 }
