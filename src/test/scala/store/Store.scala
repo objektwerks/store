@@ -19,3 +19,5 @@ class Clerk {
 }
 
 case class Store(inventory: Inventory, stock: Stock, clerk: Clerk)
+
+case class Experience(store: Store)
