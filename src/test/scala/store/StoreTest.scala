@@ -2,7 +2,7 @@ package store
 
 import org.scalatest.FunSuite
 
-class Shop extends FunSuite{
+class StoreTest extends FunSuite{
   test("store") {
   }
 }
