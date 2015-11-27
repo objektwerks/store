@@ -35,7 +35,7 @@ case class Detail(product: Product, price: Price, discounted: Price)
 case class Order(details: ArrayBuffer[Detail] = ArrayBuffer[Detail]()) {
   def add(detail: Detail): Unit = details += detail
 
-  def total: Double = details.map(detail => detail.price.amount).sum
+  def total: Double = details.map(detail => detail.discounted.amount).sum
 }
 
 case class Session(catalog: Catalog) {
