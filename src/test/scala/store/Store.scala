@@ -20,7 +20,9 @@ case class Bundle(products: Set[Product], price: Double)
 
 case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[Bundle])
 
-case class Cart(entries: Vector[Entry])
+case class Item(entry: Entry, quantity: Int)
+
+case class Cart(items: Vector[Item])
 
 class Store(catalog: Catalog) {
   def checkout(cart: Cart): Double = 0.0
