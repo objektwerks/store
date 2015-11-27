@@ -1,5 +1,7 @@
 package store
 
+import java.time.LocalDateTime
+
 import scala.collection.mutable.ArrayBuffer
 
 sealed trait Product
@@ -32,7 +34,7 @@ case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
 case class Detail(product: Product, price: Price, discounted: Price)
 
-case class Order(details: Vector[Detail]) {
+case class Order(details: Vector[Detail], placed: LocalDateTime = LocalDateTime.now()) {
   def total: Double = details.map(detail => detail.discounted.amount).sum
 }
 
