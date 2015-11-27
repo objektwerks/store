@@ -50,9 +50,7 @@ case class Session(catalog: Catalog) {
   }
 }
 
-case object Store {
-  private val catalog = Builder.catalog
-
+case class Store(catalog: Catalog) {
   def shop: Session = Session(catalog)
 }
 
