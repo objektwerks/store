@@ -16,9 +16,13 @@ case class Price(price: Double)
 
 case class Entry(product: Product, price: Price)
 
-case class Discount(product: Product, quantity: Int, discount: Double)
+case class Discount(entry: Entry, quantity: Int, discount: Double, rule: (Entry, Int, Double) => Entry) {
+  def apply: Entry = rule(entry, quantity, discount)
+}
 
-case class Bundle(products: Set[Product], discount: Double)
+case class Bundle(entries: Set[Entry], rule: (Set[Entry]) => Set[Entry]) {
+  def apply: Set[Entry] = rule(entries)
+}
 
 case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[Bundle])
 
