@@ -22,10 +22,6 @@ case class Bundle(products: Set[Product], discount: Double)
 
 case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[Bundle])
 
-object Catalog {
-  def build: Catalog = Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
-}
-
 case class Item(entry: Entry, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = new ArrayBuffer[Item]())
@@ -43,7 +39,11 @@ case class Session(catalog: Catalog) {
 }
 
 object Store {
-  private val catalog = Catalog.build
+  private val catalog = Builder.catalog
 
   def shop: Session = Session(catalog)
+}
+
+object Builder {
+  def catalog: Catalog = Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
 }
