@@ -2,6 +2,8 @@ package store
 
 import java.time.LocalDateTime
 
+import store.Rules.{BundleRule, DiscountRule}
+
 import scala.collection.mutable.ArrayBuffer
 
 sealed trait Product
@@ -16,11 +18,16 @@ trait Champagne extends Product
 
 case class Entry(product: Product, price: Double)
 
-case class Discount(rule: (Entry, Int, Double) => Entry, entry: Entry, quantity: Int, discount: Double) {
+case object Rules {
+  type DiscountRule = (Entry, Int, Double) => Entry
+  type BundleRule = (Set[Entry]) => Set[Entry]
+}
+
+case class Discount(rule: DiscountRule, entry: Entry, quantity: Int, discount: Double) {
   def apply: Entry = rule(entry, quantity, discount)
 }
 
-case class Bundle(rule: (Set[Entry]) => Set[Entry], entries: Set[Entry]) {
+case class Bundle(rule: BundleRule, entries: Set[Entry]) {
   def apply: Set[Entry] = rule(entries)
 }
 
@@ -56,6 +63,12 @@ case class Store(catalog: Catalog) {
 
 case object Builder {
   def catalog: Catalog = {
-    Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
+    Catalog(entries, discounts, bundles)
   }
+
+  private def entries: Set[Entry] = Set[Entry]()
+
+  private def discounts: Set[Discount] = Set[Discount]()
+
+  private def bundles: Set[Bundle] = Set[Bundle]()
 }
