@@ -71,7 +71,7 @@ case class Session(catalog: Catalog) {
 
   def remove(item: Item): Unit = cart.items -= item
 
-  def checkout: Order = {
+  def checkout: Order = { // TODO
     Order(Vector[Detail]())
   }
 }
@@ -81,6 +81,8 @@ class Store(catalog: Catalog) {
 }
 
 class Builder {
+  import Rules._
+
   private val brie = Brie(Kinds.Brie, 5.00)
   private val gouda = Gouda(Kinds.Gouda, 4.00)
   private val kiwi = Kiwi(Kinds.Kiwi, 2.00)
@@ -94,16 +96,25 @@ class Builder {
   private def products: Set[Product] = Set[Product](brie, gouda, kiwi, plum, champagne)
 
   private def discounts: Set[Discount] = {
-    import Rules._
+    val brieDiscount = Discount(greaterThan, standardDiscount, brie, 0.10, 1)
+    val goudaDiscount = Discount(greaterThan, standardDiscount, gouda, 0.10, 1)
     val champagneDiscount = Discount(greaterThan, standardDiscount, champagne, 0.10, 1)
-    Set[Discount](champagneDiscount)
+    Set[Discount](brieDiscount, goudaDiscount, champagneDiscount)
   }
 
   private def bundles: Set[Bundle] = {
-    import Rules._
-    val kinds = Set[Kinds.Value](Kinds.Champagne, Kinds.Brie, Kinds.Gouda)
+    Set[Bundle](brieGoudaChampagne, kiwiPlumChampagne)
+  }
+
+  private def brieGoudaChampagne: Bundle = {
+    val kinds = Set[Kinds.Value](Kinds.Brie, Kinds.Gouda, Kinds.Champagne)
     val products = Set[Product](brie, gouda, champagne)
-    val bundleDiscount = Bundle(contentMatch, standardBundleDiscount, kinds, products, 0.10)
-    Set[Bundle](bundleDiscount)
+    Bundle(contentMatch, standardBundleDiscount, kinds, products, 0.10)
+  }
+
+  private def kiwiPlumChampagne: Bundle = {
+    val kinds = Set[Kinds.Value](Kinds.Kiwi, Kinds.Plum, Kinds.Champagne)
+    val products = Set[Product](kiwi, plum, champagne)
+    Bundle(contentMatch, standardBundleDiscount, kinds, products, 0.10)
   }
 }
