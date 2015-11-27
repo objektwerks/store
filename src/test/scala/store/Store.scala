@@ -2,38 +2,57 @@ package store
 
 import java.time.LocalDateTime
 
-import store.Rules.{BundleRule, DiscountRule}
+import store.Rules.{MatchRule, QuantityRule, BundleRule, DiscountRule}
 
 import scala.collection.mutable.ArrayBuffer
 
-sealed trait Product
-trait Apple extends Product
-trait Banana extends Product
-trait Grapes extends Product
-trait Kiwi extends Product
-trait Orange extends Product
-trait Pear extends Product
-trait Strawberries extends Product
-trait Champagne extends Product
+object Kinds extends Enumeration {
+  val Brie, Gouda, Kiwi, Plum, Champagne = Value
+}
 
-case class Entry(product: Product, price: Double)
+sealed trait Product {
+  def kind: Kinds.Value
+  def price: Double
+}
+case class Brie(kind: Kinds.Value, price: Double) extends Product
+case class Gouda(kind: Kinds.Value, price: Double) extends Product
+case class Kiwi(kind: Kinds.Value, price: Double) extends Product
+case class Plum(kind: Kinds.Value, price: Double) extends Product
+case class Champagne(kind: Kinds.Value, price: Double) extends Product
 
 case object Rules {
-  type DiscountRule = (Entry, Int, Double) => Entry
-  type BundleRule = (Set[Entry]) => Set[Entry]
+  type QuantityRule = (Int) => Boolean
+  type MatchRule = (Set[Kinds.Value], Set[Product]) => Boolean
+  type DiscountRule = (Product, Double) => Double
+  type BundleRule = (Set[Product], Double) => Double
+
+  def greaterThan: QuantityRule = (quantity: Int) => if (quantity > 1) true else false
+
+  def contentMatch: MatchRule = (kinds: Set[Kinds.Value], products: Set[Product]) => {
+    kinds == products.map(_.kind)
+  }
+
+  def standardDiscount: DiscountRule = (product: Product, discount: Double) => {
+    product.price - (product.price * discount)
+  }
+
+  def standardBundleDiscount: BundleRule = (products: Set[Product], discount: Double) => {
+    val total = products.map(_.price).sum
+    total  - (total * discount)
+  }
 }
 
-case class Discount(rule: DiscountRule, entry: Entry, quantity: Int, discount: Double) {
-  def apply: Entry = rule(entry, quantity, discount)
+case class Discount(quantityRule: QuantityRule, discountRule: DiscountRule, product: Product, discount: Double, quantity: Int) {
+  def apply: Option[Double] = if (quantityRule(quantity)) Some(discountRule(product, discount)) else None
 }
 
-case class Bundle(rule: BundleRule, entries: Set[Entry]) {
-  def apply: Set[Entry] = rule(entries)
+case class Bundle(matchRule: MatchRule, bundleRule: BundleRule, kinds: Set[Kinds.Value], products: Set[Product], discount: Double) {
+  def apply: Option[Double] = if (matchRule(kinds, products)) Some(bundleRule(products, discount)) else None
 }
 
-case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[Bundle])
+case class Catalog(products: Set[Product], discounts: Set[Discount], bundles: Set[Bundle])
 
-case class Item(entry: Entry, quantity: Int)
+case class Item(product: Product, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
@@ -57,18 +76,34 @@ case class Session(catalog: Catalog) {
   }
 }
 
-case class Store(catalog: Catalog) {
+class Store(catalog: Catalog) {
   def shop: Session = Session(catalog)
 }
 
-case object Builder {
+class Builder {
+  private val brie = Brie(Kinds.Brie, 5.00)
+  private val gouda = Gouda(Kinds.Gouda, 4.00)
+  private val kiwi = Kiwi(Kinds.Kiwi, 2.00)
+  private val plum = Plum(Kinds.Plum, 1.00)
+  private val champagne = Champagne(Kinds.Champagne, 30.00)
+
   def catalog: Catalog = {
-    Catalog(entries, discounts, bundles)
+    Catalog(products, discounts, bundles)
   }
 
-  private def entries: Set[Entry] = Set[Entry]()
+  private def products: Set[Product] = Set[Product](brie, gouda, kiwi, plum, champagne)
 
-  private def discounts: Set[Discount] = Set[Discount]()
+  private def discounts: Set[Discount] = {
+    import Rules._
+    val champagneDiscount = Discount(greaterThan, standardDiscount, champagne, 0.10, 1)
+    Set[Discount](champagneDiscount)
+  }
 
-  private def bundles: Set[Bundle] = Set[Bundle]()
+  private def bundles: Set[Bundle] = {
+    import Rules._
+    val kinds = Set[Kinds.Value](Kinds.Champagne, Kinds.Brie, Kinds.Gouda)
+    val products = Set[Product](brie, gouda, champagne)
+    val bundleDiscount = Bundle(contentMatch, standardBundleDiscount, kinds, products, 0.10)
+    Set[Bundle](bundleDiscount)
+  }
 }
