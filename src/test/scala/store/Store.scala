@@ -12,7 +12,7 @@ trait Pear extends Product
 trait Strawberries extends Product
 trait Champagne extends Product
 
-case class Price(price: Double)
+case class Price(amount: Double)
 
 case class Entry(product: Product, price: Price)
 
@@ -28,9 +28,15 @@ case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[B
 
 case class Item(entry: Entry, quantity: Int)
 
-case class Cart(items: ArrayBuffer[Item] = new ArrayBuffer[Item]())
+case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
-case class Order()
+case class Detail(product: Product, price: Price, discount: Price)
+
+case class Order(details: ArrayBuffer[Detail] = ArrayBuffer[Detail]()) {
+  def add(detail: Detail): Unit = details += detail
+
+  def total: Double = details.map(detail => detail.price.amount).sum
+}
 
 case class Session(catalog: Catalog) {
   private val cart = Cart()
@@ -44,13 +50,13 @@ case class Session(catalog: Catalog) {
   }
 }
 
-object Store {
+case object Store {
   private val catalog = Builder.catalog
 
   def shop: Session = Session(catalog)
 }
 
-object Builder {
+case object Builder {
   def catalog: Catalog = {
     Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
   }
