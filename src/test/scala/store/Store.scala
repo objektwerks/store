@@ -26,7 +26,7 @@ case class Item(entry: Entry, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = new ArrayBuffer[Item]())
 
-case class Receipt()
+case class Order()
 
 case class Session(catalog: Catalog) {
   private val cart = Cart()
@@ -35,8 +35,8 @@ case class Session(catalog: Catalog) {
 
   def remove(item: Item): Unit = cart.items -= item
 
-  def checkout: Receipt = {
-    Receipt()
+  def checkout: Order = {
+    Order()
   }
 }
 
