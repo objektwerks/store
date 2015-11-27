@@ -30,7 +30,7 @@ case class Item(entry: Entry, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
-case class Detail(product: Product, price: Price, discount: Price)
+case class Detail(product: Product, price: Price, discounted: Price)
 
 case class Order(details: ArrayBuffer[Detail] = ArrayBuffer[Detail]()) {
   def add(detail: Detail): Unit = details += detail
