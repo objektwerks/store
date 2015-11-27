@@ -2,7 +2,7 @@ package store
 
 import scala.collection.mutable.ArrayBuffer
 
-trait Product
+sealed trait Product
 trait Apple extends Product
 trait Banana extends Product
 trait Grapes extends Product
