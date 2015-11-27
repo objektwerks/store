@@ -47,5 +47,7 @@ object Store {
 }
 
 object Builder {
-  def catalog: Catalog = Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
+  def catalog: Catalog = {
+    Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
+  }
 }
