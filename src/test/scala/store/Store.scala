@@ -32,9 +32,7 @@ case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
 case class Detail(product: Product, price: Price, discounted: Price)
 
-case class Order(details: ArrayBuffer[Detail] = ArrayBuffer[Detail]()) {
-  def add(detail: Detail): Unit = details += detail
-
+case class Order(details: Vector[Detail]) {
   def total: Double = details.map(detail => detail.discounted.amount).sum
 }
 
@@ -46,7 +44,7 @@ case class Session(catalog: Catalog) {
   def remove(item: Item): Unit = cart.items -= item
 
   def checkout: Order = {
-    Order()
+    Order(Vector[Detail]())
   }
 }
 
