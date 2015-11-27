@@ -35,7 +35,9 @@ case class Session(catalog: Catalog) {
 
   def remove(item: Item): Unit = cart.items -= item
 
-  def checkout: Receipt = Receipt()
+  def checkout: Receipt = {
+    Receipt()
+  }
 }
 
 object Store {
