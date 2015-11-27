@@ -14,9 +14,7 @@ trait Pear extends Product
 trait Strawberries extends Product
 trait Champagne extends Product
 
-case class Price(amount: Double)
-
-case class Entry(product: Product, price: Price)
+case class Entry(product: Product, price: Double)
 
 case class Discount(rule: (Entry, Int, Double) => Entry, entry: Entry, quantity: Int, discount: Double) {
   def apply: Entry = rule(entry, quantity, discount)
@@ -32,8 +30,8 @@ case class Item(entry: Entry, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
-case class Detail(product: Product, price: Price, discounted: Price, quantity: Int) {
-  def total: Double = discounted.amount * quantity
+case class Detail(product: Product, price: Double, discounted: Double, quantity: Int) {
+  def total: Double = discounted * quantity
 }
 
 case class Order(details: Vector[Detail], placed: LocalDateTime = LocalDateTime.now()) {
