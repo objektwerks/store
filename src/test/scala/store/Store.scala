@@ -32,10 +32,12 @@ case class Item(entry: Entry, quantity: Int)
 
 case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
-case class Detail(product: Product, price: Price, discounted: Price)
+case class Detail(product: Product, price: Price, discounted: Price, quantity: Int) {
+  def total: Double = discounted.amount * quantity
+}
 
 case class Order(details: Vector[Detail], placed: LocalDateTime = LocalDateTime.now()) {
-  def total: Double = details.map(detail => detail.discounted.amount).sum
+  def total: Double = details.map(detail => detail.total).sum
 }
 
 case class Session(catalog: Catalog) {
