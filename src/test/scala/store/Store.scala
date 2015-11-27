@@ -1,5 +1,7 @@
 package store
 
+import scala.collection.mutable.ArrayBuffer
+
 trait Product
 trait Apple extends Product
 trait Banana extends Product
@@ -22,8 +24,26 @@ case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[B
 
 case class Item(entry: Entry, quantity: Int)
 
-case class Cart(items: Vector[Item])
+case class Cart(items: ArrayBuffer[Item] = new ArrayBuffer[Item]())
 
-class Store(catalog: Catalog) {
-  def checkout(cart: Cart): Double = 0.0
+case class Receipt()
+
+case class Session(catalog: Catalog) {
+  private val cart = Cart()
+
+  def add(item: Item): Unit = cart.items += item
+
+  def remove(item: Item): Unit = cart.items -= item
+
+  def checkout: Receipt = Receipt()
+}
+
+object Store {
+  private val catalog = CatalogBuilder.build
+
+  def shop: Session = Session(catalog)
+}
+
+object CatalogBuilder {
+  def build: Catalog = Catalog(Set[Entry](), Set[Discount](), Set[Bundle]())
 }
