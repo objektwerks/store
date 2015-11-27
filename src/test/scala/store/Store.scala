@@ -18,7 +18,7 @@ case class Entry(product: Product, price: Price)
 
 case class Discount(product: Product, quantity: Int, discount: Double)
 
-case class Bundle(products: Set[Product], price: Double)
+case class Bundle(products: Set[Product], discount: Double)
 
 case class Catalog(entries: Set[Entry], discounts: Set[Discount], bundles: Set[Bundle])
 
