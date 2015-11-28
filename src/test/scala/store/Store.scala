@@ -70,13 +70,13 @@ case class Cart(catalog: Catalog) {
 
   def checkout: Double = {
     val total = items.map(_.total).sum
-    val totalDiscountAmount = discounts
-    val totalBundlePercentage = bundles
+    val totalDiscountAmount = calculateDiscountAmount
+    val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = total * totalBundlePercentage
     total - (totalDiscountAmount + totalBundleAmount)
   }
 
-  private def discounts: Double = {
+  private def calculateDiscountAmount: Double = {
     val discounts = catalog.discounts
     var totalAmount = 0.0
     discounts.foreach { discount =>
@@ -87,7 +87,7 @@ case class Cart(catalog: Catalog) {
     totalAmount
   }
 
-  private def bundles: Double = {
+  private def calculateBundlePercentage: Double = {
     val bundles = catalog.bundles
     var totalPercentage = 0.0
     val products = items.map(_.product.key).toSet
