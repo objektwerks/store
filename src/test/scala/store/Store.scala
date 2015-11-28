@@ -20,7 +20,7 @@ case class Discount(key: Key.Value, threshold: Int, discount: Double) {
     val product = item.product
     val quantity = item.quantity
     if (key == product.key && quantity >= threshold)
-      quantity * (product.price - (product.price * discount))
+      quantity * (product.price * discount)
     else 0.0
   }
 }
