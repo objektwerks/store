@@ -16,11 +16,9 @@ case class Strawberries(key: Key.Value, price: Double) extends Product
 case class Champagne(key: Key.Value, price: Double) extends Product
 
 case class Discount(key: Key.Value, threshold: Int, discount: Double) {
-  def apply(item: Item): Double = {
-    val product = item.product
-    val quantity = item.quantity
-    if (key == product.key && quantity >= threshold)
-      quantity * (product.price * discount)
+  def apply(product: Key.Value, price: Double, quantity: Double): Double = {
+    if (key == product && quantity >= threshold)
+      quantity * (price * discount)
     else 0.0
   }
 }
@@ -63,23 +61,22 @@ case class Item(product: Product, quantity: Int) {
   def total: Double = product.price * quantity
 }
 
-case class Cart(catalog: Catalog, items: ArrayBuffer[Item] = ArrayBuffer[Item]()) {
-  def total: Double = items.map(_.total).sum
-}
+case class Cart(catalog: Catalog) {
+  private val items: ArrayBuffer[Item] = ArrayBuffer[Item]()
 
-class Store(catalog: Catalog) {
-  def shop: Cart = Cart(catalog)
+  def add(item: Item): Unit = items += item
 
-  def checkout(cart: Cart): Double = {
-    val total = cart.total
+  def remove(item: Item): Unit = items -= item
+
+  def checkout: Double = {
+    val total = items.map(_.total).sum
     var totalDiscountAmount = 0.0
     var totalBundlePercentage = 0.0
 
     val discounts = catalog.discounts
-    val items = cart.items
     discounts.foreach { discount =>
       items.filter(_.product.key == discount.key).foreach { item =>
-        totalDiscountAmount += discount.apply(item)
+        totalDiscountAmount += discount.apply(item.product.key, item.product.price, item.quantity)
       }
     }
 
@@ -91,5 +88,13 @@ class Store(catalog: Catalog) {
 
     val totalBundleAmount = total * totalBundlePercentage
     total - (totalDiscountAmount + totalBundleAmount)
+  }
+}
+
+class Store(catalog: Catalog) {
+  def shop: Cart = Cart(catalog)
+
+  def checkout(cart: Cart): Double = {
+    cart.checkout
   }
 }
