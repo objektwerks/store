@@ -88,11 +88,11 @@ case class Cart(catalog: Catalog) {
   private var items: ListBuffer[Item] = mutable.ListBuffer[Item]()
 
   def add(item: Item): Unit = {
-    items += item
+    items = items += item
   }
 
   def remove(item: Item): Unit = {
-    items -= item
+    items = items -= item
   }
 
   def checkout: Receipt = {
