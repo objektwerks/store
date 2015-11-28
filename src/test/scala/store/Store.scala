@@ -1,5 +1,7 @@
 package store
 
+import java.time.LocalDateTime
+
 import scala.collection.mutable.ArrayBuffer
 
 object Key extends Enumeration {
@@ -61,6 +63,18 @@ case class Item(product: Product, quantity: Int) {
   def total: Double = product.price * quantity
 }
 
+case class Receipt(items: Vector[Item],
+                   totalAmount: Double,
+                   totalDiscountAmount: Double,
+                   totalBundlePercentage: Double,
+                   totalBundleAmount: Double,
+                   finalTotal: Double,
+                   purchased: LocalDateTime = LocalDateTime.now()) {
+  def print: String = {
+    toString
+  }
+}
+
 case class Cart(catalog: Catalog) {
   private val items: ArrayBuffer[Item] = ArrayBuffer[Item]()
 
@@ -68,12 +82,13 @@ case class Cart(catalog: Catalog) {
 
   def remove(item: Item): Unit = items -= item
 
-  def checkout: Double = {
+  def checkout: Receipt = {
     val totalAmount = calculateTotalAmount
     val totalDiscountAmount = calculateDiscountAmount
     val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = totalAmount * totalBundlePercentage
-    totalAmount - (totalDiscountAmount + totalBundleAmount)
+    val finalTotal = totalAmount - (totalDiscountAmount + totalBundleAmount)
+    Receipt(items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
   }
 
   private def calculateTotalAmount: Double = items.map(_.total).sum
@@ -103,7 +118,7 @@ case class Cart(catalog: Catalog) {
 class Store(catalog: Catalog) {
   def shop: Cart = Cart(catalog)
 
-  def checkout(cart: Cart): Double = {
+  def checkout(cart: Cart): Receipt = {
     cart.checkout
   }
 }
