@@ -18,6 +18,8 @@ class StoreTest extends FunSuite{
   }
 
   test("cart") {
-    
+    val catalog = Catalog()
+    val cart = Cart(catalog)
+
   }
 }
