@@ -49,13 +49,11 @@ object Catalog {
 
 case class Item(product: Product, quantity: Int)
 
-case class Cart(items: ArrayBuffer[Item] = ArrayBuffer[Item]())
-
-case class Session(catalog: Catalog, cart: Cart)
+case class Cart(catalog: Catalog, items: ArrayBuffer[Item] = ArrayBuffer[Item]())
 
 class Store(catalog: Catalog) {
-  def shop: Session = Session(catalog, Cart())
+  def shop: Cart = Cart(catalog)
 
-  def checkout(session: Session): Unit = {
+  def checkout(cart: Cart): Unit = {
   }
 }
