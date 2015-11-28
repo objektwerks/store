@@ -69,12 +69,14 @@ case class Cart(catalog: Catalog) {
   def remove(item: Item): Unit = items -= item
 
   def checkout: Double = {
-    val total = items.map(_.total).sum
+    val totalAmount = calculateTotalAmount
     val totalDiscountAmount = calculateDiscountAmount
     val totalBundlePercentage = calculateBundlePercentage
-    val totalBundleAmount = total * totalBundlePercentage
-    total - (totalDiscountAmount + totalBundleAmount)
+    val totalBundleAmount = totalAmount * totalBundlePercentage
+    totalAmount - (totalDiscountAmount + totalBundleAmount)
   }
+
+  private def calculateTotalAmount: Double = items.map(_.total).sum
 
   private def calculateDiscountAmount: Double = {
     val discounts = catalog.discounts
