@@ -66,7 +66,6 @@ case class Item(product: Product, quantity: Int) {
 case class Receipt(items: Vector[Item],
                    totalAmount: Double,
                    totalDiscountAmount: Double,
-                   totalBundlePercentage: Double,
                    totalBundleAmount: Double,
                    finalTotal: Double,
                    purchased: LocalDateTime = LocalDateTime.now()) {
@@ -88,7 +87,7 @@ case class Cart(catalog: Catalog) {
     val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = totalAmount * totalBundlePercentage
     val finalTotal = totalAmount - (totalDiscountAmount + totalBundleAmount)
-    Receipt(items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
+    Receipt(items.toVector, totalAmount, totalDiscountAmount, totalBundleAmount, finalTotal)
   }
 
   private def calculateTotalAmount: Double = items.map(_.total).sum
