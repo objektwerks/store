@@ -85,14 +85,14 @@ case class Receipt(items: Vector[Item],
 }
 
 case class Cart(catalog: Catalog) {
-  private var items: ListBuffer[Item] = mutable.ListBuffer[Item]()
+  private val items: ListBuffer[Item] = mutable.ListBuffer[Item]()
 
   def add(item: Item): Unit = {
-    items = items += item
+    items += item
   }
 
   def remove(item: Item): Unit = {
-    items = items -= item
+    items -= item
   }
 
   def checkout: Receipt = {
