@@ -71,7 +71,15 @@ case class Receipt(items: Vector[Item],
                    finalTotal: Double,
                    purchased: LocalDateTime = LocalDateTime.now()) {
   def print: String = {
-    toString
+    val builder = new StringBuilder()
+    items.foreach{ item => builder ++= s"Item: ${item.toString}" }
+    builder ++= s"Total Amount: $totalAmount"
+    builder ++= s"Total Discount Amount: $totalDiscountAmount"
+    builder ++= s"Total Bundle Percentage: $totalBundlePercentage"
+    builder ++= s"Total Bundle Amount: $totalBundleAmount"
+    builder ++= s"Final Total: $finalTotal"
+    builder ++= s"Purchased: $purchased"
+    builder.toString()
   }
 }
 
