@@ -64,22 +64,23 @@ class Store(catalog: Catalog) {
 
   def checkout(cart: Cart): Double = {
     val total = cart.total
-    var totalDiscounts = 0.0
-    var totalBundles = 0.0
+    var totalDiscountPercentage = 0.0
+    var totalBundlePercentage = 0.0
 
     val discounts = catalog.discounts
     val items = cart.items
     discounts.foreach { discount =>
       items.filter(_.product.key == discount.key).foreach { item =>
-        totalDiscounts += discount.apply(item.quantity)
+        totalDiscountPercentage += discount.apply(item.quantity)
       }
     }
 
     val bundles = catalog.bundles
     val products = items.map(_.product.key).toSet
     bundles.foreach { bundle =>
-      totalBundles += bundle.apply(products)
+      totalBundlePercentage += bundle.apply(products)
     }
-    total - (totalDiscounts + totalBundles)
+    val totalDiscounts = total * (totalDiscountPercentage + totalBundlePercentage)
+    total - totalDiscounts
   }
 }
