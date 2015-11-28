@@ -16,11 +16,19 @@ case class Strawberries(key: Key.Value, price: Double) extends Product
 case class Champagne(key: Key.Value, price: Double) extends Product
 
 case class Discount(key: Key.Value, threshold: Int, discount: Double) {
-  def apply(quantity: Int): Double = if (quantity >= threshold) discount else 0.0
+  def apply(item: Item): Double = {
+    val product = item.product
+    val quantity = item.quantity
+    if (key == product.key && quantity >= threshold)
+      quantity * (product.price - (product.price * discount))
+    else 0.0
+  }
 }
 
 case class Bundle(keys: Set[Key.Value], discount: Double) {
-  def apply(products: Set[Key.Value]): Double = if (keys.intersect(products) == keys) discount else 0.0
+  def apply(products: Set[Key.Value]): Double = {
+    if (keys.intersect(products) == keys) discount else 0.0
+  }
 }
 
 case class Catalog(products: Set[Product], discounts: Set[Discount], bundles: Set[Bundle])
@@ -30,10 +38,10 @@ object Catalog {
   }
 
   private def products: Set[Product] = {
-    val brie = Brie(Key.Brie, 5.00)
-    val truffles = Truffles(Key.Truffles, 15.00)
-    val strawberries = Strawberries(Key.Strawberries, 10.00)
-    val champagne = Champagne(Key.Champagne, 30.00)
+    val brie = Brie(Key.Brie, 10.00)
+    val truffles = Truffles(Key.Truffles, 20.00)
+    val strawberries = Strawberries(Key.Strawberries, 20.00)
+    val champagne = Champagne(Key.Champagne, 50.00)
     Set[Product](brie, truffles, strawberries, champagne)
   }
 
@@ -64,14 +72,14 @@ class Store(catalog: Catalog) {
 
   def checkout(cart: Cart): Double = {
     val total = cart.total
-    var totalDiscountPercentage = 0.0
+    var totalDiscountAmount = 0.0
     var totalBundlePercentage = 0.0
 
     val discounts = catalog.discounts
     val items = cart.items
     discounts.foreach { discount =>
       items.filter(_.product.key == discount.key).foreach { item =>
-        totalDiscountPercentage += discount.apply(item.quantity)
+        totalDiscountAmount += discount.apply(item)
       }
     }
 
@@ -80,7 +88,8 @@ class Store(catalog: Catalog) {
     bundles.foreach { bundle =>
       totalBundlePercentage += bundle.apply(products)
     }
-    val totalDiscounts = total * (totalDiscountPercentage + totalBundlePercentage)
-    total - totalDiscounts
+
+    val totalBundleAmount = total * totalBundlePercentage
+    total - (totalDiscountAmount + totalBundleAmount)
   }
 }
