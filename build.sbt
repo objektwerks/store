@@ -16,7 +16,7 @@ scalacOptions ++= Seq(
   "-feature",
   "-unchecked",
   "-deprecation",
-  "-Xlint",
+  "-Xlint:-nullary-unit,_",
   "-Xfatal-warnings"
 )
 fork in test := true

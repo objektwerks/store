@@ -2,7 +2,8 @@ package store
 
 import java.time.LocalDateTime
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 
 object Key extends Enumeration {
   val Brie, Truffles, Strawberries, Champagne = Value
@@ -72,23 +73,27 @@ case class Receipt(items: Vector[Item],
                    purchased: LocalDateTime = LocalDateTime.now()) {
   def print: String = {
     val builder = new StringBuilder()
-    items.foreach{ item => builder ++= s"Item: ${item.toString}" }
-    builder ++= s"Total Amount: $totalAmount"
-    builder ++= s"Total Discount Amount: $totalDiscountAmount"
-    builder ++= s"Total Bundle Percentage: $totalBundlePercentage"
-    builder ++= s"Total Bundle Amount: $totalBundleAmount"
-    builder ++= s"Final Total: $finalTotal"
-    builder ++= s"Purchased: $purchased"
+    builder ++= s"Purchased: $purchased\n"
+    items.foreach{ item => builder ++= s"Item ( product: ${item.product.key}, price: ${item.product.price}, quantity: ${item.quantity} )\n" }
+    builder ++= s"Total Amount: $totalAmount\n"
+    builder ++= s"Total Discount Amount: $totalDiscountAmount\n"
+    builder ++= s"Total Bundle Percentage: $totalBundlePercentage\n"
+    builder ++= s"Total Bundle Amount: $totalBundleAmount\n"
+    builder ++= s"Final Total: $finalTotal\n"
     builder.toString()
   }
 }
 
 case class Cart(catalog: Catalog) {
-  private val items: ArrayBuffer[Item] = ArrayBuffer[Item]()
+  private var items: ListBuffer[Item] = mutable.ListBuffer[Item]()
 
-  def add(item: Item): Unit = items += item
+  def add(item: Item): Unit = {
+    items += item
+  }
 
-  def remove(item: Item): Unit = items -= item
+  def remove(item: Item): Unit = {
+    items -= item
+  }
 
   def checkout: Receipt = {
     val totalAmount = calculateTotalAmount
