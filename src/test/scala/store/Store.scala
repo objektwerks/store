@@ -19,7 +19,9 @@ case class Discount(key: Key.Value, threshold: Int, discount: Double) {
   def apply(quantity: Int): Double = if (quantity >= threshold) discount else 0.0
 }
 
-case class Bundle(keys: Set[Key.Value], discount: Double)
+case class Bundle(keys: Set[Key.Value], discount: Double) {
+  def apply(products: Set[Key.Value]): Double = if (keys.intersect(products) == keys) discount else 0.0
+}
 
 case class Catalog(products: Set[Product], discounts: Set[Discount], bundles: Set[Bundle])
 object Catalog {
