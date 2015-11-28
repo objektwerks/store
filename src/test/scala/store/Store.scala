@@ -82,6 +82,8 @@ case class Receipt(items: Vector[Item],
     builder ++= s"Final Total: $finalTotal\n"
     builder.toString()
   }
+
+  override def toString: String = print
 }
 
 case class Cart(catalog: Catalog) {
