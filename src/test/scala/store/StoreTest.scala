@@ -2,8 +2,10 @@ package store
 
 import org.scalatest.FunSuite
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Success, Failure}
+import scala.util.{Failure, Success}
 
 class StoreTest extends FunSuite {
   private implicit val ec = ExecutionContext.global
@@ -47,17 +49,23 @@ class StoreTest extends FunSuite {
   test("store") {
     val catalog = Catalog()
     val store = new Store(catalog)
-    val futures = Seq(buildFutureSeq(store), buildFutureSeq(store), buildFutureSeq(store), buildFutureSeq(store))
-    val future = Future.sequence(futures)
+    val futures: List[Future[Receipt]] = createListOfFutureReceipt(store)
+    val future: Future[List[Receipt]] = Future.sequence(futures)
     future onComplete {
-      case Success(receipt) =>
-        assert(receipt != null)
-        println(receipt)
+      case Success(receipt) => assert(receipt.length == futures.length)
       case Failure(failure) => throw failure
     }
   }
 
-  def buildFutureSeq(store: Store) = {
+  private def createListOfFutureReceipt(store: Store): List[Future[Receipt]] = {
+    val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
+    for (i <- 1 to 10) {
+      buffer += createFutureReceipt(store)
+    }
+    buffer.toList
+  }
+
+  private def createFutureReceipt(store: Store): Future[Receipt] = {
     Future {
       val cart = store.shop
       val brie = Item(Brie(Key.Brie, 10.00), 2)
