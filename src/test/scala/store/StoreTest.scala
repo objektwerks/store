@@ -27,23 +27,14 @@ class StoreTest extends FunSuite {
   test("cart") {
     val catalog = Catalog()
     val cart = Cart(catalog)
-
-    val brie = Item(Brie(Key.Brie, 10.00), 2)
-    val truffles = Item(Truffles(Key.Truffles, 20.00), 2)
-    val strawberries = Item(Strawberries(Key.Strawberries, 20.00), 2)
-    val champagne = Item(Champagne(Key.Champagne, 50.00), 2)
-    cart.add(brie)
-    cart.add(truffles)
-    cart.add(strawberries)
-    cart.add(champagne)
-
+    fillCart(cart)
     val receipt = cart.checkout
     assert(receipt.totalAmount == 200.0)
     assert(receipt.totalDiscountAmount == 20.0)
     assert(receipt.totalBundlePercentage == 0.1)
     assert(receipt.totalBundleAmount == 20.0)
     assert(receipt.finalTotal == 160.0)
-    println(receipt.print)
+    println(receipt)
   }
 
   test("store") {
@@ -52,7 +43,9 @@ class StoreTest extends FunSuite {
     val futures: List[Future[Receipt]] = createListOfFutureReceipt(store)
     val future: Future[List[Receipt]] = Future.sequence(futures)
     future onComplete {
-      case Success(receipt) => assert(receipt.length == futures.length)
+      case Success(receipt) =>
+        assert(receipt.length == futures.length)
+        println(receipt)
       case Failure(failure) => throw failure
     }
   }
@@ -68,15 +61,19 @@ class StoreTest extends FunSuite {
   private def createFutureReceipt(store: Store): Future[Receipt] = {
     Future {
       val cart = store.shop
-      val brie = Item(Brie(Key.Brie, 10.00), 2)
-      val truffles = Item(Truffles(Key.Truffles, 20.00), 2)
-      val strawberries = Item(Strawberries(Key.Strawberries, 20.00), 2)
-      val champagne = Item(Champagne(Key.Champagne, 50.00), 2)
-      cart.add(brie)
-      cart.add(truffles)
-      cart.add(strawberries)
-      cart.add(champagne)
+      fillCart(cart)
       store.checkout(cart)
     }
+  }
+
+  private def fillCart(cart: Cart): Unit = {
+    val brie = Item(Brie(Key.Brie, 10.00), 2)
+    val truffles = Item(Truffles(Key.Truffles, 20.00), 2)
+    val strawberries = Item(Strawberries(Key.Strawberries, 20.00), 2)
+    val champagne = Item(Champagne(Key.Champagne, 50.00), 2)
+    cart.add(brie)
+    cart.add(truffles)
+    cart.add(strawberries)
+    cart.add(champagne)
   }
 }

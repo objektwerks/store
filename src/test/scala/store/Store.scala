@@ -1,6 +1,7 @@
 package store
 
 import java.time.LocalDateTime
+import java.util.UUID
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -70,9 +71,11 @@ case class Receipt(items: Vector[Item],
                    totalBundlePercentage: Double,
                    totalBundleAmount: Double,
                    finalTotal: Double,
-                   purchased: LocalDateTime = LocalDateTime.now()) {
-  def print: String = {
+                   purchased: LocalDateTime = LocalDateTime.now(),
+                   number: String = UUID.randomUUID().toString) {
+  override def toString: String = {
     val builder = new StringBuilder()
+    builder ++= s"Number: $number\n"
     builder ++= s"Purchased: $purchased\n"
     items.foreach{ item => builder ++= s"Item ( product: ${item.product.key}, price: ${item.product.price}, quantity: ${item.quantity} )\n" }
     builder ++= s"Total Amount: $totalAmount\n"
@@ -82,8 +85,6 @@ case class Receipt(items: Vector[Item],
     builder ++= s"Final Total: $finalTotal\n"
     builder.toString()
   }
-
-  override def toString: String = print
 }
 
 case class Cart(catalog: Catalog) {
