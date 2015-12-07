@@ -1,14 +1,10 @@
 package store
 
-import java.util.UUID
-
-case class Shopper(name: String = UUID.randomUUID().toString, payment: String = UUID.randomUUID().toString)
-
 class Store(catalog: Catalog) {
-  def shop(shopper: Shopper): (Shopper, Cart) = (shopper, Cart(catalog))
 
-  def checkout(shopperWithCart: (Shopper, Cart)): Receipt = {
-    val (shopper, cart) = shopperWithCart
-    cart.checkout(shopper)
+  def shop: Shopper = Shopper(Cart(catalog))
+
+  def checkout(shopper: Shopper): Receipt = {
+    shopper.cart.checkout(shopper.id, shopper.payment)
   }
 }

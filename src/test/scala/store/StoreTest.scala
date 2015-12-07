@@ -28,7 +28,8 @@ class StoreTest extends FunSuite {
     val catalog = Catalog()
     val cart = Cart(catalog)
     fillCart(cart)
-    val receipt = cart.checkout(Shopper())
+    val shopper = Shopper(cart)
+    val receipt = cart.checkout(shopper.id, shopper.payment)
     assert(receipt.totalAmount == 200.0)
     assert(receipt.totalDiscountAmount == 20.0)
     assert(receipt.totalBundlePercentage == 0.1)
@@ -50,7 +51,7 @@ class StoreTest extends FunSuite {
 
   private def createListOfFutureReceipt(store: Store): List[Future[Receipt]] = {
     val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
-    for (i <- 1 to 10) {
+    for (i <- 1 to 100) {
       buffer += createFutureReceipt(store)
     }
     buffer.toList
@@ -58,9 +59,9 @@ class StoreTest extends FunSuite {
 
   private def createFutureReceipt(store: Store): Future[Receipt] = {
     Future {
-      val shopperWithCart = store.shop(Shopper())
-      fillCart(shopperWithCart._2)
-      store.checkout(shopperWithCart)
+      val shopper = store.shop
+      fillCart(shopper.cart)
+      store.checkout(shopper)
     }
   }
 
