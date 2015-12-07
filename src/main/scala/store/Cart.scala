@@ -17,13 +17,13 @@ case class Cart(catalog: Catalog) {
     items -= item
   }
 
-  def checkout: Receipt = {
+  def checkout(shopper: Shopper): Receipt = {
     val totalAmount = calculateTotalAmount
     val totalDiscountAmount = calculateDiscountAmount
     val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = totalAmount * totalBundlePercentage
     val finalTotal = totalAmount - (totalDiscountAmount + totalBundleAmount)
-    Receipt(items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
+    Receipt(shopper, items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
   }
 
   private def calculateTotalAmount: Double = items.map(_.total).sum
@@ -54,7 +54,8 @@ case class Item(product: Product, quantity: Int) {
   def total: Double = product.price * quantity
 }
 
-case class Receipt(items: Vector[Item],
+case class Receipt(shopper: Shopper,
+                   items: Vector[Item],
                    totalAmount: Double,
                    totalDiscountAmount: Double,
                    totalBundlePercentage: Double,
@@ -64,6 +65,8 @@ case class Receipt(items: Vector[Item],
                    number: String = UUID.randomUUID().toString) {
   override def toString: String = {
     val builder = new StringBuilder()
+    builder ++= s"Shopper name: ${shopper.name}\n"
+    builder ++= s"Shopper payment: ${shopper.payment}\n"
     builder ++= s"Number: $number\n"
     builder ++= s"Purchased: $purchased\n"
     items.foreach{ item => builder ++= s"Item ( product: ${item.product.key}, price: ${item.product.price}, quantity: ${item.quantity} )\n" }
