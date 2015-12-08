@@ -2,8 +2,6 @@ package store
 
 import org.scalatest.FunSuite
 
-import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -41,38 +39,11 @@ class StoreTest extends FunSuite {
   test("store") {
     val catalog = Catalog()
     val store = new Store(catalog)
-    val futures: List[Future[Receipt]] = createListOfFutureReceipt(store)
+    val futures: List[Future[Receipt]] = createListOfFutureReceipt(store, shoppers = 100)
     val future: Future[List[Receipt]] = Future.sequence(futures)
     future onComplete {
       case Success(receipt) => assert(receipt.length == futures.length)
       case Failure(failure) => throw failure
     }
-  }
-
-  private def createListOfFutureReceipt(store: Store): List[Future[Receipt]] = {
-    val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
-    for (i <- 1 to 100) {
-      buffer += createFutureReceipt(store)
-    }
-    buffer.toList
-  }
-
-  private def createFutureReceipt(store: Store): Future[Receipt] = {
-    Future {
-      val shopper = store.shop
-      fillCart(shopper.cart)
-      store.checkout(shopper)
-    }
-  }
-
-  private def fillCart(cart: Cart): Unit = {
-    val brie = Item(Brie(Key.Brie, 10.00), 2)
-    val truffles = Item(Truffles(Key.Truffles, 20.00), 2)
-    val strawberries = Item(Strawberries(Key.Strawberries, 20.00), 2)
-    val champagne = Item(Champagne(Key.Champagne, 50.00), 2)
-    cart.add(brie)
-    cart.add(truffles)
-    cart.add(strawberries)
-    cart.add(champagne)
   }
 }
