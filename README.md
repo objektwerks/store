@@ -1,6 +1,6 @@
 Store
 =====
->Virtual store simulation with products, catalog, discounts, bundled discounts, cart and shoppers.
+>Virtual store simulation with products, catalog, discounts, cart, store and shoppers.
 
 Test
 ----
