@@ -33,16 +33,18 @@ class StoreTest extends FunSuite {
     assert(receipt.totalBundlePercentage == 0.1)
     assert(receipt.totalBundleAmount == 20.0)
     assert(receipt.finalTotal == 160.0)
-    println(receipt)
+    println(s"\nCart Test -> $receipt")
   }
 
   test("store") {
     val catalog = Catalog()
     val store = new Store(catalog)
-    val futures: List[Future[Receipt]] = createListOfFutureReceipt(store, shoppers = 100)
-    val future: Future[List[Receipt]] = Future.sequence(futures)
+    val futures = createListOfFutureReceipt(store, shoppers = 100)
+    val future = Future.sequence(futures)
     future onComplete {
-      case Success(receipt) => assert(receipt.length == futures.length)
+      case Success(receipt) =>
+        println(s"Store Test -> Number of receipts: ${receipt.length}.\n")
+        assert(receipt.length == futures.length)
       case Failure(failure) => throw failure
     }
   }
