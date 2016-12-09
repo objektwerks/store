@@ -1,24 +1,28 @@
-name := "objektwerks.store"
+name := "store"
+organization := "objektwerks"
 version := "1.0"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   Seq(
-    "ch.qos.logback" % "logback-classic" % "1.1.3",
-    "org.scalatest" % "scalatest_2.11" % "2.2.5" % "test"
+    "ch.qos.logback" % "logback-classic" % "1.1.7",
+    "org.scalatest" % "scalatest_2.12" % "3.0.1" % "test"
   )
 }
 scalacOptions ++= Seq(
   "-language:postfixOps",
-  "-language:implicitConversions",
   "-language:reflectiveCalls",
+  "-language:implicitConversions",
   "-language:higherKinds",
   "-feature",
+  "-Ywarn-unused-import",
+  "-Ywarn-unused",
+  "-Ywarn-dead-code",
   "-unchecked",
   "-deprecation",
-  "-Xlint:-nullary-unit,_",
-  "-Xfatal-warnings"
+  "-Xfatal-warnings",
+  "-Xlint:missing-interpolator",
+  "-Xlint"
 )
 fork in test := true
 javaOptions += "-server -Xss1m -Xmx2g"
-logLevel := Level.Info
