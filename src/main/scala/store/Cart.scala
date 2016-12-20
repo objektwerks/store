@@ -32,7 +32,7 @@ case class Cart(catalog: Catalog) {
     var totalAmount = 0.0
     discounts.foreach { discount =>
       items.filter(_.product.key == discount.key).foreach { item =>
-        totalAmount += discount.apply(item.product.key, item.product.price, item.quantity)
+        totalAmount += discount.price(item.product.key, item.product.price, item.quantity)
       }
     }
     totalAmount
@@ -43,7 +43,7 @@ case class Cart(catalog: Catalog) {
     var totalPercentage = 0.0
     val products = items.map(_.product.key).toSet
     bundles.foreach { bundle =>
-      totalPercentage += bundle.apply(products)
+      totalPercentage += bundle.price(products)
     }
     totalPercentage
   }

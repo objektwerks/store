@@ -29,7 +29,7 @@ object Catalog {
 }
 
 case class Discount(key: Key.Value, threshold: Int, discount: Double) {
-  def apply(product: Key.Value, price: Double, quantity: Double): Double = {
+  def price(product: Key.Value, price: Double, quantity: Double): Double = {
     if (key == product && quantity >= threshold)
       quantity * (price * discount)
     else 0.0
@@ -37,7 +37,7 @@ case class Discount(key: Key.Value, threshold: Int, discount: Double) {
 }
 
 case class Bundle(keys: Set[Key.Value], discount: Double) {
-  def apply(products: Set[Key.Value]): Double = {
+  def price(products: Set[Key.Value]): Double = {
     if (keys.intersect(products) == keys) discount else 0.0
   }
 }
