@@ -24,8 +24,7 @@ object Catalog {
   }
 
   private def bundles: Set[Bundle] = {
-    val brieChampagne = Bundle(Set(Key.Champagne, Key.Brie, Key.Truffles, Key.Strawberries), 0.10)
-    Set[Bundle](brieChampagne)
+    Set[Bundle](Bundle(Set(Key.Champagne, Key.Brie, Key.Truffles, Key.Strawberries), 0.10))
   }
 }
 
