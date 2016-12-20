@@ -16,15 +16,15 @@ package object store {
     cart.add(champagne)
   }
 
-  def createListOfFutureReceipt(store: Store, shoppers: Int): List[Future[Receipt]] = {
+  def createReceipts(store: Store, shoppers: Int): List[Future[Receipt]] = {
     val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
     for (i <- 1 to shoppers) {
-      buffer += createFutureReceipt(store)
+      buffer += createReceipt(store)
     }
     buffer.toList
   }
 
-  def createFutureReceipt(store: Store): Future[Receipt] = {
+  def createReceipt(store: Store): Future[Receipt] = {
     Future {
       val shopper = store.shop
       fillCart(shopper.cart)

@@ -39,7 +39,7 @@ class StoreTest extends FunSuite {
   test("store") {
     val catalog = Catalog()
     val store = new Store(catalog)
-    val futures = createListOfFutureReceipt(store, shoppers = 100)
+    val futures = createReceipts(store, shoppers = 100)
     val future = Future.sequence(futures)
     future onComplete {
       case Success(receipt) =>

@@ -9,7 +9,7 @@ object Simulator extends App {
 
   val catalog = Catalog()
   val store = new Store(catalog)
-  val receipts = Future.sequence(createListOfFutureReceipt(store, shoppers = 1000))
+  val receipts = Future.sequence( createReceipts(store, shoppers = 1000) )
   receipts onComplete {
     case Success(shoppers) => println(s"*** Number of shoppers: ${shoppers.length}! ***")
     case Failure(failure) => println(s"*** Simulation failed: ${failure.getMessage} ***")
