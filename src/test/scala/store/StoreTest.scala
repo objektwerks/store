@@ -2,7 +2,8 @@ package store
 
 import org.scalatest.FunSuite
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 
 class StoreTest extends FunSuite {
@@ -39,13 +40,13 @@ class StoreTest extends FunSuite {
   test("store") {
     val catalog = Catalog()
     val store = new Store(catalog)
-    val futures = createReceipts(store, shoppers = 100)
-    val future = Future.sequence(futures)
-    future onComplete {
-      case Success(receipt) =>
-        println(s"Store Test -> Number of receipts: ${receipt.length}.\n")
-        assert(receipt.length == futures.length)
+    val receipts = Future.sequence( createReceipts(store, shoppers = 100) )
+    receipts onComplete {
+      case Success(shoppers) =>
+        println(s"Store Test -> Number of receipts: ${shoppers.length}.\n")
+        assert(shoppers.length == 100)
       case Failure(failure) => throw failure
     }
+    Await.ready(receipts, 1 second)
   }
 }
