@@ -5,8 +5,8 @@ scalaVersion := "2.12.2"
 ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 libraryDependencies ++= {
   Seq(
-    "ch.qos.logback" % "logback-classic" % "1.1.9",
-    "org.scalatest" % "scalatest_2.12" % "3.0.1" % "test"
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "org.scalatest" % "scalatest_2.12" % "3.0.3" % "test"
   )
 }
 scalacOptions ++= Seq(
