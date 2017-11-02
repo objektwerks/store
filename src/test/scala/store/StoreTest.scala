@@ -47,6 +47,6 @@ class StoreTest extends FunSuite {
         assert(shoppers.length == 100)
       case Failure(failure) => throw failure
     }
-    Await.ready(receipts, 1 second)
+    Await.result(receipts, 1 second)
   }
 }
