@@ -1,11 +1,11 @@
 name := "store"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.12"
 libraryDependencies ++= {
   Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "org.scalatest" %% "scalatest" % "3.0.8" % Test
+    "org.scalatest" %% "scalatest" % "3.0.9" % Test
   )
 }
 scalacOptions ++= Seq(
