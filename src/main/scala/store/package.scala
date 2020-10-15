@@ -26,7 +26,7 @@ package object store {
 
   def createReceipt(store: Store): Future[Receipt] = {
     Future {
-      val shopper = store.shop
+      val shopper = store.newShopper
       fillCart(shopper.cart)
       store.checkout(shopper)
     }
