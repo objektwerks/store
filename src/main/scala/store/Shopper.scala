@@ -3,7 +3,7 @@ package store
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
-case class Shopper(id: Int, payment: String, cart: Cart)
+final case class Shopper(id: Int, payment: String, cart: Cart) extends scala.Product with Serializable
 
 object Shopper {
   private val counter = new AtomicInteger(1)
