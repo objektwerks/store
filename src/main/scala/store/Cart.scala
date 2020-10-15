@@ -32,7 +32,7 @@ case class Cart(catalog: Catalog) {
     var totalAmount = 0.0
     discounts.foreach { discount =>
       items.filter(_.product.key == discount.key).foreach { item =>
-        totalAmount += discount.price(item.product.key, item.product.price, item.quantity)
+        totalAmount += discount.price(item.product.key, item.product.price, item.quantity.toDouble)
       }
     }
     totalAmount

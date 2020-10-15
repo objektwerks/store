@@ -1,25 +1,10 @@
 name := "store"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.2"
 libraryDependencies ++= {
   Seq(
     "ch.qos.logback" % "logback-classic" % "1.2.3",
-    "org.scalatest" %% "scalatest" % "3.0.9" % Test
+    "org.scalatest" %% "scalatest" % "3.2.2" % Test
   )
 }
-scalacOptions ++= Seq(
-  "-language:postfixOps",
-  "-language:reflectiveCalls",
-  "-language:implicitConversions",
-  "-language:higherKinds",
-  "-feature",
-  "-Ywarn-unused-import",
-  "-Ywarn-unused",
-  "-Ywarn-dead-code",
-  "-unchecked",
-  "-deprecation",
-  "-Xfatal-warnings",
-  "-Xlint:missing-interpolator",
-  "-Xlint"
-)

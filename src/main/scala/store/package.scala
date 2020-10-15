@@ -18,7 +18,7 @@ package object store {
 
   def createReceipts(store: Store, shoppers: Int): List[Future[Receipt]] = {
     val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
-    for (i <- 1 to shoppers) {
+    for (_ <- 1 to shoppers) {
       buffer += createReceipt(store)
     }
     buffer.toList
