@@ -1,8 +1,8 @@
 package store
 
-final case class Catalog(products: Set[Product], discounts: Set[Discount], bundles: Set[Bundle])
+final case class Catalog(products: Set[Product], discounts: Set[Discount], bundles: Set[Bundle]) extends scala.Product with Serializable
 
-final case class Discount(key: Key.Value, threshold: Int, discount: Double) {
+final case class Discount(key: Key.Value, threshold: Int, discount: Double) extends scala.Product with Serializable {
   def price(product: Key.Value, price: Double, quantity: Double): Double = {
     if (key == product && quantity >= threshold)
       quantity * (price * discount)
@@ -10,7 +10,7 @@ final case class Discount(key: Key.Value, threshold: Int, discount: Double) {
   }
 }
 
-final case class Bundle(keys: Set[Key.Value], discount: Double) {
+final case class Bundle(keys: Set[Key.Value], discount: Double) extends scala.Product with Serializable {
   def price(products: Set[Key.Value]): Double = {
     if (keys.intersect(products) == keys) discount else 0.0
   }

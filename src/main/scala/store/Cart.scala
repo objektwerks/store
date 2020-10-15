@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-final case class Cart(catalog: Catalog) {
+final case class Cart(catalog: Catalog) extends scala.Product with Serializable {
   private val items: ListBuffer[Item] = mutable.ListBuffer[Item]()
 
   def add(item: Item): Unit = {
@@ -49,7 +49,7 @@ final case class Cart(catalog: Catalog) {
   }
 }
 
-final case class Item(product: Product, quantity: Int) {
+final case class Item(product: Product, quantity: Int) extends scala.Product with Serializable {
   def total: Double = product.price * quantity
 }
 
@@ -61,7 +61,7 @@ final case class Receipt(shopper: Int,
                          totalBundlePercentage: Double,
                          totalBundleAmount: Double,
                          finalTotal: Double,
-                         purchased: LocalDateTime = LocalDateTime.now()) {
+                         purchased: LocalDateTime = LocalDateTime.now()) extends scala.Product with Serializable {
   override def toString: String = {
     val builder = new StringBuilder()
     builder ++= s"Shopper: $shopper\n"
