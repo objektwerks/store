@@ -4,18 +4,15 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
-class Store(val catalog: Catalog) {
+class Store(val catalog: Catalog):
   def newShopper: Shopper = Shopper(Cart(catalog))
 
-  def checkout(shopper: Shopper): Receipt = {
-    shopper.cart.checkout(shopper.id, shopper.payment)
-  }
-}
+  def checkout(shopper: Shopper): Receipt = shopper.cart.checkout(shopper.id, shopper.payment)
 
-object Store {
-  private implicit val ec: ExecutionContext = ExecutionContext.global
+object Store:
+  given ExecutionContext = ExecutionContext.global
 
-  def fillCart(cart: Cart): Unit = {
+  def fillCart(cart: Cart): Unit =
     val brie = Item(Brie(ProductKey.Brie, 10.00), 2)
     val truffles = Item(Truffles(ProductKey.Truffles, 20.00), 2)
     val strawberries = Item(Strawberries(ProductKey.Strawberries, 20.00), 2)
@@ -24,21 +21,17 @@ object Store {
     cart.add(truffles)
     cart.add(strawberries)
     cart.add(champagne)
-  }
 
-  def createReceipts(store: Store, shoppers: Int): List[Future[Receipt]] = {
+  def createReceipts(store: Store, shoppers: Int): List[Future[Receipt]] =
     val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
     for (_ <- 1 to shoppers) {
       buffer += createReceipt(store)
     }
     buffer.toList
-  }
 
-  def createReceipt(store: Store): Future[Receipt] = {
+  def createReceipt(store: Store): Future[Receipt] =
     Future {
       val shopper = store.newShopper
       fillCart(shopper.cart)
       store.checkout(shopper)
     }
-  }
-}
