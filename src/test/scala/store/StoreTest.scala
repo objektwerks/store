@@ -8,22 +8,23 @@ import scala.concurrent.duration.*
 import scala.util.{Failure, Success}
 import scala.language.postfixOps
 
+import ProductKey.*
 import Store.*
 
 class StoreTest extends AnyFunSuite with Matchers:
   given ExecutionContext = ExecutionContext.global
 
   test("discount") {
-    val discount = Discount(ProductKey.Brie, 2, 0.10)
-    val discountedAmount = discount.price(ProductKey.Brie, 10.0, 2)
+    val discount = Discount(Brie, 2, 0.10)
+    val discountedAmount = discount.price(Brie, 10.0, 2)
     val discountedTotal = (10.0 * 2) - discountedAmount
     discountedAmount shouldBe 2.0
     discountedTotal shouldBe 18.0
   }
 
   test("bundle discount") {
-    val bundle = Bundle(Set(ProductKey.Champagne, ProductKey.Brie, ProductKey.Truffles, ProductKey.Strawberries), 0.10)
-    val discountedPercentage = bundle.price(Set(ProductKey.Champagne, ProductKey.Brie, ProductKey.Truffles, ProductKey.Strawberries))
+    val bundle = Bundle(Set(Champagne, Brie, Truffles, Strawberries), 0.10)
+    val discountedPercentage = bundle.price(Set(Champagne, Brie, Truffles, Strawberries))
     discountedPercentage shouldBe 0.1
   }
 
