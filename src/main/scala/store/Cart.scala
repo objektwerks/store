@@ -5,29 +5,24 @@ import java.time.LocalDateTime
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-final case class Cart(catalog: Catalog) extends scala.Product with Serializable {
+final case class Cart(catalog: Catalog):
   private val items: ListBuffer[Item] = mutable.ListBuffer[Item]()
 
-  def add(item: Item): Unit = {
-    items += item
-  }
+  def add(item: Item): Unit = items += item
 
-  def remove(item: Item): Unit = {
-    items -= item
-  }
+  def remove(item: Item): Unit = items -= item
 
-  def checkout(shopper: Int, payment: String): Receipt = {
+  def checkout(shopper: Int, payment: String): Receipt =
     val totalAmount = calculateTotalAmount
     val totalDiscountAmount = calculateDiscountAmount
     val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = totalAmount * totalBundlePercentage
     val finalTotal = totalAmount - (totalDiscountAmount + totalBundleAmount)
     Receipt(shopper, payment, items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
-  }
 
   private def calculateTotalAmount: Double = items.map(_.total).sum
 
-  private def calculateDiscountAmount: Double = {
+  private def calculateDiscountAmount: Double =
     val discounts = catalog.discounts
     var totalAmount = 0.0
     discounts.foreach { discount =>
@@ -36,22 +31,16 @@ final case class Cart(catalog: Catalog) extends scala.Product with Serializable 
       }
     }
     totalAmount
-  }
 
-  private def calculateBundlePercentage: Double = {
+  private def calculateBundlePercentage: Double =
     val bundles = catalog.bundles
     var totalPercentage = 0.0
     val products = items.map(_.product.key).toSet
-    bundles.foreach { bundle =>
-      totalPercentage += bundle.price(products)
-    }
+    bundles.foreach { bundle => totalPercentage += bundle.price(products) }
     totalPercentage
-  }
-}
 
-final case class Item(product: Product, quantity: Int) extends scala.Product with Serializable {
+final case class Item(product: Product, quantity: Int):
   def total: Double = product.price * quantity
-}
 
 final case class Receipt(shopper: Int,
                          payment: String,
@@ -61,8 +50,8 @@ final case class Receipt(shopper: Int,
                          totalBundlePercentage: Double,
                          totalBundleAmount: Double,
                          finalTotal: Double,
-                         purchased: LocalDateTime = LocalDateTime.now()) extends scala.Product with Serializable {
-  override def toString: String = {
+                         purchased: LocalDateTime = LocalDateTime.now()):
+  override def toString: String =
     val builder = new StringBuilder()
     builder ++= s"Shopper: $shopper\n"
     builder ++= s"Payment: $payment\n"
@@ -74,5 +63,3 @@ final case class Receipt(shopper: Int,
     builder ++= s"Total Bundle Amount: $totalBundleAmount\n"
     builder ++= s"Final Total: $finalTotal\n"
     builder.toString()
-  }
-}
