@@ -1,5 +1,7 @@
 package store
 
+import ProductKey.*
+
 final case class Catalog(products: Set[Product],
                          discounts: Set[Discount],
                          bundles: Set[Bundle])
@@ -22,23 +24,23 @@ object Catalog:
   def apply(): Catalog = Catalog(products, discounts, bundles)
 
   private def products: Set[Product] =
-    val brie = Brie(ProductKey.Brie, 10.00)
-    val truffles = Truffles(ProductKey.Truffles, 20.00)
-    val strawberries = Strawberries(ProductKey.Strawberries, 20.00)
-    val champagne = Champagne(ProductKey.Champagne, 50.00)
+    val brie = Product(Brie, 10.00)
+    val truffles = Product(Truffles, 20.00)
+    val strawberries = Product(Strawberries, 20.00)
+    val champagne = Product(Champagne, 50.00)
     Set[Product](brie, truffles, strawberries, champagne)
 
   private def discounts: Set[Discount] =
-    val brie = Discount(ProductKey.Brie, 2, 0.10)
-    val truffles = Discount(ProductKey.Truffles, 2, 0.10)
-    val strawberries = Discount(ProductKey.Strawberries, 2, 0.10)
-    val champagne = Discount(ProductKey.Champagne, 2, 0.10)
+    val brie = Discount(Brie, 2, 0.10)
+    val truffles = Discount(Truffles, 2, 0.10)
+    val strawberries = Discount(Strawberries, 2, 0.10)
+    val champagne = Discount(Champagne, 2, 0.10)
     Set[Discount](brie, truffles, strawberries, champagne)
 
   private def bundles: Set[Bundle] =
     Set[Bundle](
       Bundle(
-        keys = Set( ProductKey.Champagne, ProductKey.Brie, ProductKey.Truffles, ProductKey.Strawberries ),
+        keys = Set( Champagne, Brie, Truffles, Strawberries ),
         discount = 0.10
       )
     )
