@@ -3,7 +3,7 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
 package object store {
-  private implicit val ec = ExecutionContext.global
+  private implicit val ec: ExecutionContext = ExecutionContext.global
 
   def fillCart(cart: Cart): Unit = {
     val brie = Item(Brie(Key.Brie, 10.00), 2)
