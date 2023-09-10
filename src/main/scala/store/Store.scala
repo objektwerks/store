@@ -16,10 +16,10 @@ object Store {
   private implicit val ec: ExecutionContext = ExecutionContext.global
 
   def fillCart(cart: Cart): Unit = {
-    val brie = Item(Brie(Key.Brie, 10.00), 2)
-    val truffles = Item(Truffles(Key.Truffles, 20.00), 2)
-    val strawberries = Item(Strawberries(Key.Strawberries, 20.00), 2)
-    val champagne = Item(Champagne(Key.Champagne, 50.00), 2)
+    val brie = Item(Brie(ProductKey.Brie, 10.00), 2)
+    val truffles = Item(Truffles(ProductKey.Truffles, 20.00), 2)
+    val strawberries = Item(Strawberries(ProductKey.Strawberries, 20.00), 2)
+    val champagne = Item(Champagne(ProductKey.Champagne, 50.00), 2)
     cart.add(brie)
     cart.add(truffles)
     cart.add(strawberries)

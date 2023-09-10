@@ -14,16 +14,16 @@ class StoreTest extends AnyFunSuite with Matchers:
   private implicit val ec: ExecutionContext = ExecutionContext.global
 
   test("discount") {
-    val discount = Discount(Key.Brie, 2, 0.10)
-    val discountedAmount = discount.price(Key.Brie, 10.0, 2)
+    val discount = Discount(ProductKey.Brie, 2, 0.10)
+    val discountedAmount = discount.price(ProductKey.Brie, 10.0, 2)
     val discountedTotal = (10.0 * 2) - discountedAmount
     discountedAmount shouldBe 2.0
     discountedTotal shouldBe 18.0
   }
 
   test("bundle discount") {
-    val bundle = Bundle(Set(Key.Champagne, Key.Brie, Key.Truffles, Key.Strawberries), 0.10)
-    val discountedPercentage = bundle.price(Set(Key.Champagne, Key.Brie, Key.Truffles, Key.Strawberries))
+    val bundle = Bundle(Set(ProductKey.Champagne, ProductKey.Brie, ProductKey.Truffles, ProductKey.Strawberries), 0.10)
+    val discountedPercentage = bundle.price(Set(ProductKey.Champagne, ProductKey.Brie, ProductKey.Truffles, ProductKey.Strawberries))
     discountedPercentage shouldBe 0.1
   }
 
