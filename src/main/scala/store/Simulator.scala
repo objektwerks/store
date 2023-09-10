@@ -6,7 +6,7 @@ import scala.language.postfixOps
 import scala.util.{Failure, Success}
 
 object Simulator extends App {
-  implicit val ec = ExecutionContext.global
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
   val catalog = Catalog()
   val store = new Store(catalog)
