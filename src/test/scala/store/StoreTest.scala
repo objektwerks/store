@@ -4,14 +4,14 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.util.{Failure, Success}
 import scala.language.postfixOps
 
-import Store._
+import Store.*
 
 class StoreTest extends AnyFunSuite with Matchers:
-  private implicit val ec: ExecutionContext = ExecutionContext.global
+  given ExecutionContext = ExecutionContext.global
 
   test("discount") {
     val discount = Discount(ProductKey.Brie, 2, 0.10)
