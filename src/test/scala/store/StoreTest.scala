@@ -8,8 +8,10 @@ import scala.concurrent.duration._
 import scala.util.{Failure, Success}
 import scala.language.postfixOps
 
+import Store._
+
 class StoreTest extends AnyFunSuite with Matchers {
-  private implicit val ec = ExecutionContext.global
+  private implicit val ec: ExecutionContext = ExecutionContext.global
 
   test("discount") {
     val discount = Discount(Key.Brie, 2, 0.10)
