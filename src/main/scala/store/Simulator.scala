@@ -1,14 +1,15 @@
 package store
 
 import scala.concurrent.{ExecutionContext, Await, Future}
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
 
-import Store._
+import Store.*
 
-object Simulator extends App {
-  implicit val ec: ExecutionContext = ExecutionContext.global
+@main
+def runApp() =
+  given ExecutionContext = ExecutionContext.global
 
   val catalog = Catalog()
   val store = new Store(catalog)
@@ -17,7 +18,7 @@ object Simulator extends App {
     case Success(shoppers) =>
       println(s"*** Number of shoppers: ${shoppers.length}! ***")
       require(shoppers.length == 1000)
-    case Failure(failure) => println(s"*** Simulation failed: ${failure.getMessage} ***")
+    case Failure(failure) =>
+      println(s"*** Simulation failed: ${failure.getMessage} ***")
   }
   Await.ready(receipts, 3 seconds)
-}
