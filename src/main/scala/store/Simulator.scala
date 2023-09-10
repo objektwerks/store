@@ -5,6 +5,8 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
 
+import Store._
+
 object Simulator extends App {
   implicit val ec: ExecutionContext = ExecutionContext.global
 
