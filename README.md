@@ -1,6 +1,6 @@
 Store
 =====
->Virtual store simulation with products, catalog, discounts, cart, store and shoppers using Scala 3.
+>Store simulation with products, catalog, discounts, cart, store and shoppers using Scala 3.
 
 Build
 -----
