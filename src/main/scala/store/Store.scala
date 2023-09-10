@@ -4,6 +4,8 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{ExecutionContext, Future}
 
+import ProductKey.*
+
 class Store(val catalog: Catalog):
   def newShopper: Shopper = Shopper(Cart(catalog))
 
@@ -13,10 +15,10 @@ object Store:
   given ExecutionContext = ExecutionContext.global
 
   def fillCart(cart: Cart): Unit =
-    val brie = Item(Brie(ProductKey.Brie, 10.00), 2)
-    val truffles = Item(Truffles(ProductKey.Truffles, 20.00), 2)
-    val strawberries = Item(Strawberries(ProductKey.Strawberries, 20.00), 2)
-    val champagne = Item(Champagne(ProductKey.Champagne, 50.00), 2)
+    val brie = Item(Product(Brie, 10.00), 2)
+    val truffles = Item(Product(Truffles, 20.00), 2)
+    val strawberries = Item(Product(Strawberries, 20.00), 2)
+    val champagne = Item(Product(Champagne, 50.00), 2)
     cart.add(brie)
     cart.add(truffles)
     cart.add(strawberries)
