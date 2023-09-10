@@ -3,10 +3,12 @@ package store
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
 
-final case class Shopper(id: Int, payment: String, cart: Cart) extends scala.Product with Serializable
+final case class Shopper(id: Int,
+                         payment: String,
+                         cart: Cart)
 
-object Shopper {
+object Shopper:
   private val counter = new AtomicInteger(1)
 
-  def apply(cart: Cart): Shopper = Shopper(counter.getAndIncrement(), UUID.randomUUID().toString, cart)
-}
+  def apply(cart: Cart): Shopper =
+    Shopper( id = counter.getAndIncrement(), payment = UUID.randomUUID().toString, cart = cart )
