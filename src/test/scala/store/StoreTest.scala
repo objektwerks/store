@@ -10,7 +10,7 @@ import scala.language.postfixOps
 
 import Store._
 
-class StoreTest extends AnyFunSuite with Matchers {
+class StoreTest extends AnyFunSuite with Matchers:
   private implicit val ec: ExecutionContext = ExecutionContext.global
 
   test("discount") {
@@ -53,4 +53,3 @@ class StoreTest extends AnyFunSuite with Matchers {
     }
     Await.result(receipts, 1 second)
   }
-}
