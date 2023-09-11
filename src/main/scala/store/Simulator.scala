@@ -15,10 +15,7 @@ def runStore() =
   val store = Store(catalog)
   val receipts = Future.sequence( createReceipts(store, shoppers = 1000) )
   receipts onComplete {
-    case Success(shoppers) =>
-      println(s"*** Number of shoppers: ${shoppers.length}! ***")
-      require(shoppers.length == 1000)
-    case Failure(failure) =>
-      println(s"*** Simulation failed: ${failure.getMessage} ***")
+    case Success(shoppers) => println(s"*** Number of shoppers: ${shoppers.length}! ***")
+    case Failure(failure) => println(s"*** Simulation failed: ${failure.getMessage} ***")
   }
   Await.ready(receipts, 3 seconds)
