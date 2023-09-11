@@ -50,7 +50,7 @@ class StoreTest extends AnyFunSuite with Matchers:
       case Success(shoppers) =>
         println(s"Store Test -> Number of receipts: ${shoppers.length}.\n")
         shoppers.length shouldBe 100
-      case Failure(failure) => throw failure
+      case Failure(failure) => fail("*** Store test failed!")
     }
     Await.result(receipts, 1 second)
   }
