@@ -56,7 +56,9 @@ final case class Receipt(shopper: Int,
     builder ++= s"Shopper: $shopper\n"
     builder ++= s"Payment: $payment\n"
     builder ++= s"Purchased: $purchased\n"
-    items.foreach{ item => builder ++= s"Item ( product: ${item.product.key}, price: ${item.product.price}, quantity: ${item.quantity} )\n" }
+    items.foreach { item =>
+      builder ++= s"Item ( product: ${item.product.key}, price: ${item.product.price}, quantity: ${item.quantity} )\n" 
+    }
     builder ++= s"Total Amount: $totalAmount\n"
     builder ++= s"Total Discount Amount: $totalDiscountAmount\n"
     builder ++= s"Total Bundle Percentage: $totalBundlePercentage\n"
