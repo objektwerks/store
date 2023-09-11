@@ -18,7 +18,7 @@ final case class Cart(catalog: Catalog):
     val totalBundlePercentage = calculateBundlePercentage
     val totalBundleAmount = totalAmount * totalBundlePercentage
     val finalTotal = totalAmount - (totalDiscountAmount + totalBundleAmount)
-    Receipt(shopper, payment, items.toVector, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
+    Receipt(shopper, payment, items.toList, totalAmount, totalDiscountAmount, totalBundlePercentage, totalBundleAmount, finalTotal)
 
   private def calculateTotalAmount: Double = items.map(_.total).sum
 
@@ -44,7 +44,7 @@ final case class Item(product: Product, quantity: Int):
 
 final case class Receipt(shopper: Int,
                          payment: String,
-                         items: Vector[Item],
+                         items: List[Item],
                          totalAmount: Double,
                          totalDiscountAmount: Double,
                          totalBundlePercentage: Double,
