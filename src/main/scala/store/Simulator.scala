@@ -8,7 +8,7 @@ import scala.util.{Failure, Success}
 import Store.*
 
 @main
-def runApp() =
+def runStore() =
   given ExecutionContext = ExecutionContext.global
 
   val catalog = Catalog()
