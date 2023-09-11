@@ -15,14 +15,10 @@ object Store:
   given ExecutionContext = ExecutionContext.global
 
   def fillCart(cart: Cart): Unit =
-    val brie = Item(Product(Brie, 10.00), 2)
-    val truffles = Item(Product(Truffles, 20.00), 2)
-    val strawberries = Item(Product(Strawberries, 20.00), 2)
-    val champagne = Item(Product(Champagne, 50.00), 2)
-    cart.add(brie)
-    cart.add(truffles)
-    cart.add(strawberries)
-    cart.add(champagne)
+    cart.add( Item(Product(Brie, 10.00), 2) )
+    cart.add( Item(Product(Truffles, 20.00), 2) )
+    cart.add( Item(Product(Strawberries, 20.00), 2) )
+    cart.add( Item(Product(Champagne, 50.00), 2) )
 
   def createReceipts(store: Store, shoppers: Int): List[Future[Receipt]] =
     val buffer: ListBuffer[Future[Receipt]] = mutable.ListBuffer[Future[Receipt]]()
