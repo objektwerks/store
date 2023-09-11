@@ -5,8 +5,8 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.*
-import scala.util.{Failure, Success}
 import scala.language.postfixOps
+import scala.util.{Failure, Success}
 
 import ProductKey.*
 import Store.*
