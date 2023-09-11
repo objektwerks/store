@@ -23,8 +23,8 @@ class StoreTest extends AnyFunSuite with Matchers:
   }
 
   test("bundle discount") {
-    val bundle = Bundle(Set(Champagne, Brie, Truffles, Strawberries), 0.10)
-    val discountedPercentage = bundle.price(Set(Champagne, Brie, Truffles, Strawberries))
+    val bundle = Bundle( Set(Champagne, Brie, Truffles, Strawberries), 0.10 )
+    val discountedPercentage = bundle.price( Set(Champagne, Brie, Truffles, Strawberries) )
     discountedPercentage shouldBe 0.1
   }
 
