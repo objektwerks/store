@@ -12,7 +12,7 @@ def runStore() =
   given ExecutionContext = ExecutionContext.global
 
   val catalog = Catalog()
-  val store = new Store(catalog)
+  val store = Store(catalog)
   val receipts = Future.sequence( createReceipts(store, shoppers = 1000) )
   receipts onComplete {
     case Success(shoppers) =>
