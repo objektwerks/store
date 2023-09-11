@@ -27,7 +27,7 @@ object Store:
     }
     buffer.toList
 
-  def createReceipt(store: Store): Future[Receipt] =
+  private def createReceipt(store: Store): Future[Receipt] =
     Future {
       val shopper = store.newShopper
       fillCart(shopper.cart)
