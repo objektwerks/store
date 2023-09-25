@@ -11,24 +11,22 @@ import scala.util.{Failure, Success}
 import ProductKey.*
 import Store.*
 
-class StoreTest extends AnyFunSuite with Matchers:
+final class StoreTest extends AnyFunSuite with Matchers:
   given ExecutionContext = ExecutionContext.global
 
-  test("discount") {
+  test("discount"):
     val discount = Discount(Brie, 2, 0.10)
     val discountedAmount = discount.price(Brie, 10.0, 2)
     val discountedTotal = (10.0 * 2) - discountedAmount
     discountedAmount shouldBe 2.0
     discountedTotal shouldBe 18.0
-  }
 
-  test("bundle discount") {
+  test("bundle discount"):
     val bundle = Bundle( Set(Champagne, Brie, Truffles, Strawberries), 0.10 )
     val discountedPercentage = bundle.price( Set(Champagne, Brie, Truffles, Strawberries) )
     discountedPercentage shouldBe 0.1
-  }
 
-  test("cart") {
+  test("cart"):
     val catalog = Catalog()
     val cart = Cart(catalog)
     fillCart(cart)
@@ -40,9 +38,8 @@ class StoreTest extends AnyFunSuite with Matchers:
     receipt.totalBundleAmount shouldBe 20.0
     receipt.finalTotal shouldBe 160.0
     println(s"\nCart Test -> $receipt")
-  }
 
-  test("store") {
+  test("store"):
     val catalog = Catalog()
     val store = new Store(catalog)
     val receipts = Future.sequence( createReceipts(store, shoppers = 100) )
@@ -53,4 +50,3 @@ class StoreTest extends AnyFunSuite with Matchers:
       case Failure(failure) => fail("*** Store test failed!")
     }
     Await.result(receipts, 1 second)
-  }
