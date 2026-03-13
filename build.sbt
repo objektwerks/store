@@ -4,7 +4,7 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "3.8.3-RC1"
 libraryDependencies ++= {
   Seq(
-    "ch.qos.logback" % "logback-classic" % "1.5.25",
+    "ch.qos.logback" % "logback-classic" % "1.5.32",
     "org.scalatest" %% "scalatest" % "3.2.19" % Test
   )
 }
